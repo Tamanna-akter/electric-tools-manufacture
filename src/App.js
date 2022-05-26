@@ -3,6 +3,7 @@ import Navbar from "./Pages/Shared/Navbar";
 import { Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home/Home";
 import Tools from './Pages/Home/Tools';
+import Blogs from './Pages/Blogs/Blogs';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<Home></Home>}></Route>
         <Route path="home" element={<Home></Home>}></Route>
         <Route path="tools" element={<Tools></Tools>}></Route>
+        <Route path="blogs" element={<Blogs></Blogs>}></Route>
 
 {/* <Route
   path="tools/:toolsId"

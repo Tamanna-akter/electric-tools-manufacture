@@ -125,7 +125,7 @@ const Login = () => {
           </form>
           <p>
             <small>
-              First Time User?{" "}
+              New User?{" "}
               <Link className="text-primary" to="/register">
                 Create New Account
               </Link>

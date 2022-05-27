@@ -5,6 +5,8 @@ import Home from "./Pages/Home/Home";
 import Tools from './Pages/Home/Tools';
 import Blogs from './Pages/Blogs/Blogs';
 import Portfolio from './Pages/Portfolio/Portfolio';
+import Login from './Pages/Authentication/Login';
+import Register from './Pages/Authentication/Register';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
         <Route path="tools" element={<Tools></Tools>}></Route>
         <Route path="blogs" element={<Blogs></Blogs>}></Route>
         <Route path="portfolio" element={<Portfolio></Portfolio>}></Route>
+        <Route path="login" element={<Login></Login>}></Route>
+        <Route path="register" element={<Register></Register>}></Route>
 
 {/* <Route
   path="tools/:toolsId"

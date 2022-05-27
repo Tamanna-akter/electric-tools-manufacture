@@ -18,12 +18,16 @@ const Navbar = () => {
       <li>
         <Link to="/blogs">Blogs</Link>
       </li>
+      <li>
+        <Link to="/portfolio">Portfolio</Link>
+      </li>
 
-      {user && (
+
+      {user && 
         <li>
           <Link to="/dashboard">Dashboard</Link>
         </li>
-      )}
+      }
       <li>{user ? <SignOut></SignOut> : <Link to="/login">Login</Link>}</li>
     </>
   );

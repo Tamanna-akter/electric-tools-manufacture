@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
-        <footer className="footer lg:shadow-xl shadow-xl footer-center p-5 bg-base-200 text-base-content rounded mt-16">
+        <footer className="footer lg:shadow-xl shadow-xl footer-center p-5 bg-secondary text-base-content rounded mt-16">
         <div className="grid grid-flow-col gap-4">
-          <Link to="about" className="link link-hover">
-            About us
+          <Link to="Contact" className="link link-hover">
+            Contact us
           </Link>
         </div>
         <div>

@@ -21,7 +21,7 @@ const Purchase = () => {
     const minimum_quantity = tools.min_quantity;
 
     useEffect(() => {
-        const url = `http://localhost:5000/single_parts/${_id}`;
+        const url = `http://localhost:5000/tools/${_id}`;
         fetch(url)
             .then((response) => response.json())
             .then(data => setTools(data))
@@ -47,7 +47,7 @@ const Purchase = () => {
 
         }
 
-        axios.post('http://localhost:5000/order', order)
+        axios.post('http://localhost:5000/purchase', order)
             .then(response => {
                 const { data } = response;
                 if (data.insertedId) {

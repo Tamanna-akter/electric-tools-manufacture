@@ -1,6 +1,6 @@
 # Electric tools manufacturer website
 
-## Live-site-link :
+## Live-site-link : https://electric-tools-manufactu-1d6b5.web.app/home
 
 ### About this website
 This is a fullstack website based on electric tools manufacture.

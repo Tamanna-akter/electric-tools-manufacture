@@ -1,155 +1,178 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import auth from '../../firebase.init';
+// import { async } from "@firebase/util";
+import React, { useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useQuery } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import Loading from "../Shared/Loading";
+import auth from "../../firebase.init";
 
 const Purchase = () => {
-    const { _id } = useParams();
-    const [user] = useAuthState(auth);
+  const [disable, setDisable] = useState(false);
+  const [authUser] = useAuthState(auth);
+  const [quantity, setQuantity] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const { toolsId } = useParams();
+  const navigate = useNavigate();
+  const { data: tools, isLoading } = useQuery("toolsById", () =>
+    fetch(
+      `https://localhost:5000/toolsById?id=${toolsId}`
+    ).then((res) => res.json())
+  );
 
-    // const [reload, setIsReload] = useState(true)
+  const handleForm = async (event) => {
+    event.preventDefault();
+    setLoading(true);
 
-    const [tools, setTools] = useState({});
-    const [quantity, setQuantity] = useState({});
-    // const [quantity, setNewQuantity] = useState({});
+    const minQ = parseInt(tools.min_quantity);
+    const maxQ = parseInt(tools.available_quantity);
+    if (quantity >= minQ && quantity <= maxQ) {
+      const userName = authUser.displayName;
+      const email = authUser.email;
+      const mobile = event.target.mobile.value;
+      const address = event.target.address.value;
+      const toolsId = tools._id;
+      const toolsName = tools.name;
+      // const quantity = event.target.quantity.value;
+      const price = parseInt(quantity) * parseInt(tools.unit_price);
+      const paymentData = {
+        userName,
+        email,
+        toolsId,
+        toolsName,
+        price,
+        // quantity,
+        mobile,
+        address,
+      };
+      // console.log(paymentData);
 
-    // const newQuantity = quantity.minimum_order_quantity;
-    const newQuantity = quantity;
-    const available_quantity = tools.available_quantity;
-    const minimum_quantity = tools.min_quantity;
-
-    useEffect(() => {
-        const url = `http://localhost:5000/tools/${_id}`;
-        fetch(url)
-            .then((response) => response.json())
-            .then(data => setTools(data))
-
-    }, [_id])
-
-
-
-
-    const handleOrder = event => {
-        event.preventDefault();
-
-        const order = {
-            email: user.email,
-            name: user.displayName,
-            orderQuantity: event.target.quantity.value,
-            address: event.target.address.value,
-            phone: event.target.phone.value,
-            productName: tools.name,
-            productImage: tools.img,
-            productPrice: tools.unit_price,
-            productDescription: tools.description
-
-        }
-
-        axios.post('http://localhost:5000/purchase', order)
-            .then(response => {
-                const { data } = response;
-                if (data.insertedId) {
-                    toast('Your Order was successfully')
-                    event.target.reset()
-
-                }
-                console.log(response);
-            })
-
-
-
-        const newQuantity = event.target.quantity.value;
-        // const newQuantity = quantity.minimum_order_quantity;
-        const available_quantity =tools.available_quantity;
-        const minimum_quantity = tools.min_quantity;
-        console.log(newQuantity);
-
-        if (newQuantity > available_quantity || newQuantity < minimum_quantity) {
-            return toast.error('You can not order more than ' + available_quantity + ' And Must order ' + minimum_quantity + ' above of minimum quantity ')
-
-        }
-
-        else {
-            toast.success('Your order sucessfully completed')
-            event.target.reset()
-        }
-
+      await fetch(`https://localhost:5000/purchase`, {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(paymentData),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.insertedId) {
+            event.target.reset();
+            toast.success(
+              `Item Purchased Successfull. Please pay for confirm order`
+            );
+            navigate("/dashboard/my-order");
+          }
+        });
+    } else {
+      setDisable(true);
+      toast.error("You have to place order in our given range");
     }
 
+    setLoading(false);
+  };
 
-    const handleQuantityChange = event => {
-
-        const newQuantity = event.target.value;
-        setQuantity(newQuantity);
-
-
-    }
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
-    <div className="bg-gray-300">
-
-    <div>
-
-        <div className='col-12 col-sm-12 col-lg-4 col-md-6 g-4  mx-auto '>
-
-            <div className="card px-3">
-                <div className="card-body">
-                    <h5 className="card-title"><strong>Product Name</strong>: {tools?.name}</h5>
-                    <p className="card-text"><strong>Description</strong>:  {tools?.description}</p>
-                </div>
-                <ul className="list-group list-group-flush">
-                    <li className="list-group-item"><strong>Price</strong>: {tools?.unit_price} $</li>
-
-
-                    <li className="list-group-item"><strong>Available Quantity</strong>: {tools?.available_quantity}</li>
-
-                    <li className="list-group-item"><strong>Minimum Quantity</strong>: {tools?.min_quantity}</li>
-
-
-                </ul>
-
-                <div>
-                    <form onSubmit={handleOrder} >
-
-                        <input type="number" className="border-2 w-full text-center py-2 border-green-700 my-3" placeholder={tools?.min_quantity}
-                            onChange={handleQuantityChange}
-                            name="quantity"
-                        />
-
-
-                        <br />
-
-
-                        <input type="text" name="name" disabled value={user?.displayName || ''} className="input mt-2 text-center input-bordered w-full " />
-
-                        <input type="email" name="email" disabled value={user?.email || ''} className="input text-center input-bordered w-full my-2 " />
-
-                        <input type="number" name="phone" placeholder="Phone Number" class="input input-bordered w-full my-2 " />
-
-
-                        <input type="text" name="address" placeholder="Address" class="input input-bordered w-full my-2 " />
-
-                        <button
-
-                            type="submit"
-                            disabled={newQuantity > available_quantity || newQuantity < minimum_quantity}
-                            className="btn btn-primary w-100 mx-auto " >Please Order</button>
-
-                    
-                    </form>
-
-                </div>
-
-            </div>
+    <div className="flex justify-center px-5 min-h-screen">
+      <div>
+        <h2 className=" text-center text-primary text-4xl mb-5 uppercase">
+          Purchase here
+        </h2>
+        <div className="card w-fit bg-base-100 shadow-xl">
+          <div className="card-body">
+            <h2 className=" text-2xl font-bold">Name: {tools.name}</h2>
+            <p>Desc: {tools.description}</p>
+            <p>Min_Order_Quantity: {tools.min_quantity}</p>
+            <p>Availabel_Quantity: {tools.available_quantity}</p>
+            <p>Price_Per_piece: {tools.unit_price}</p>
+          </div>
         </div>
-
+        <div className="w-full max-w-lg mx-auto">
+          <h2 className=" text-3xl text-primary text-center mt-10 mb-0">
+            Provide Your Information
+          </h2>
+          <form onSubmit={handleForm}>
+            <div className="form-control w-full max-w-lg">
+              <label className="label">
+                <span className="label-text">Name:</span>
+              </label>
+              <input
+                required
+                type="text"
+                value={authUser.displayName}
+                disabled
+                className="input input-bordered input-primary w-full max-w-lg"
+              />
+            </div>
+            <div className="form-control w-full max-w-lg mt-1">
+              <label className="label">
+                <span className="label-text">Email:</span>
+              </label>
+              <input
+                required
+                type="email"
+                value={authUser.email}
+                disabled
+                className="input input-bordered input-primary w-full max-w-lg"
+              />
+            </div>
+            <div className="form-control w-full max-w-lg mt-1">
+              <label className="label">
+                <span className="label-text">Quantity:</span>
+              </label>
+              <input
+                required
+                type="number"
+                name="quantity"
+                onKeyUp={(event) => {
+                  setQuantity(parseInt(event.target.value));
+                  setDisable(false);
+                }}
+                defaultChecked={parseInt(tools.min_quantity)}
+                placeholder={`min Quantity: ${tools.min_quantity}`}
+                className="input input-bordered input-primary w-full max-w-lg"
+              />
+            </div>
+            <div className="form-control w-full max-w-lg mt-1">
+              <label className="label">
+                <span className="label-text">Mobile:</span>
+              </label>
+              <input
+                required
+                type="text"
+                name="mobile"
+                placeholder="+880"
+                className="input input-bordered input-primary w-full max-w-lg"
+              />
+            </div>
+            <div className="form-control w-full max-w-lg mt-1">
+              <label className="label">
+                <span className="label-text">Address:</span>
+              </label>
+              <textarea
+                required
+                name="address"
+                className="textarea textarea-primary"
+                placeholder=""
+              ></textarea>
+            </div>
+            <button
+              disabled={disable}
+              className={` btn btn-primary mt-10 w-full ${
+                loading && "loading"
+              }`}
+            >
+              {loading ? "" : "Buy now"}
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
-
-
-
-</div>
-);
+  );
 };
+
 export default Purchase;

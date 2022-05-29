@@ -50,7 +50,7 @@ const Tools = () => {
                   <div className="card-actions justify-center">
                     <button
                       onClick={() => {
-                        navigate(`/purchase/${tools._id}`);
+                        navigate(`/purchase/${tool._id}`);
                       }}
                       className="btn btn-sm btn-primary mt-5"
                     >

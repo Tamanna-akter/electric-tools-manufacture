@@ -2,18 +2,15 @@ import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
-// import Loading from "../Components/Loading";
-// import { useQuery } from "react-query";
-// import { toast } from "react-toastify";
-import useAdmin from "../hooks/useAdmin";
 import Loading from "../Shared/Loading";
+import useAdmin from "../hooks/useAdmin";
 
 const Dashboard = () => {
-  const [user] = useAuthState(auth);
-  const [isAdmin, loading] = useAdmin(user);
+  const [authUser] = useAuthState(auth);
+  const [isAdmin, loading] = useAdmin(authUser);
 
   if (loading) {
-    <Loading/>;
+    <Loading />;
   }
 
   return (

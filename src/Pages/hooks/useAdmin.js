@@ -9,7 +9,7 @@ const useAdmin = (authUser) => {
     const email = authUser?.email;
     if (email) {
       fetch(
-        `http://localhost:5000/usersByEmail?email=${email}`
+        `https://localhost:5000/usersByEmail?email=${email}`
       )
         .then((res) => res.json())
         .then((data) => {

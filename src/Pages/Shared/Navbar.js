@@ -10,7 +10,7 @@ const Navbar = () => {
   const navbarMenuItems = (
     <>
       <li>
-        <Link to="/home">Home</Link>
+        <Link to="/">Home</Link>
       </li>
       <li>
         <Link to="/tools">Tools</Link>

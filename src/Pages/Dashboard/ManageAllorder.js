@@ -18,7 +18,7 @@ const ManageAllorder = () => {
     isLoading,
     refetch,
   } = useQuery(["manageallorder", authUser], () =>
-    fetch(`https://localhost:5000/purchase`, {
+    fetch(`https://thawing-atoll-26359.herokuapp.com/purchase`, {
       headers: {
         authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },

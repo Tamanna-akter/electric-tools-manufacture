@@ -19,7 +19,7 @@ const MyOrder = () => {
     refetch,
   } = useQuery(["purchased", authUser], () =>
     fetch(
-      `https://localhost:5000/purchaseByEmail?email=${authUser?.email}`,
+      `https://thawing-atoll-26359.herokuapp.com/purchaseByEmail?email=${authUser?.email}`,
       {
         headers: {
           authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -40,7 +40,7 @@ const MyOrder = () => {
   const handleDelete = (answer) => {
     if (answer) {
       console.log(deleteId);
-      fetch(`https://localhost:5000/purchaseById/${deleteId}`, {
+      fetch(`https://thawing-atoll-26359.herokuapp.com/purchaseById/${deleteId}`, {
         method: "delete",
         headers: {
           "content-type": "application/json",

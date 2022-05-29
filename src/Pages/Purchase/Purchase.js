@@ -16,7 +16,7 @@ const Purchase = () => {
   const navigate = useNavigate();
   const { data: tools, isLoading } = useQuery("toolsById", () =>
     fetch(
-      `https://localhost:5000/toolsById?id=${toolsId}`
+      `https://thawing-atoll-26359.herokuapp.com/toolsById?id=${toolsId}`
     ).then((res) => res.json())
   );
 
@@ -47,7 +47,7 @@ const Purchase = () => {
       };
       // console.log(paymentData);
 
-      await fetch(`https://localhost:5000/purchase`, {
+      await fetch(`https://thawing-atoll-26359.herokuapp.com/purchase`, {
         method: "post",
         headers: {
           "content-type": "application/json",

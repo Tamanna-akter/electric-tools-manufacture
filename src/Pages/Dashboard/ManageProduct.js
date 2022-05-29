@@ -11,14 +11,14 @@ const ManageProduct = () => {
     isLoading,
     refetch,
   } = useQuery("tools", () =>
-    fetch(`https://localhost:5000/parts`).then((res) =>
+    fetch(`https://thawing-atoll-26359.herokuapp.com/parts`).then((res) =>
       res.json()
     )
   );
 
   const handleDelete = (answer) => {
     if (answer) {
-      fetch(`https://localhost:5000/toolsById?id=${deleteId}`, {
+      fetch(`https://thawing-atoll-26359.herokuapp.com/toolsById?id=${deleteId}`, {
         method: "delete",
         headers: {
           "content-type": "application/json",

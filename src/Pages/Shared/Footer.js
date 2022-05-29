@@ -49,7 +49,7 @@ const Footer = () => {
         <div>
           <p>
             Copyright &#169; {new Date().getFullYear()} - All right reserved by
-            Creative Tools Manufacturer Ltd
+            Electric Tools Manufacturer
           </p>
         </div>
       </footer>

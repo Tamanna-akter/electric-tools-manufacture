@@ -34,7 +34,7 @@ const Login = () => {
 
     if (user) {
       console.log(user);
-      const url = 'https://localhost:5000/login';
+      const url = 'https://thawing-atoll-26359.herokuapp.com/login';
 
       fetch(url, {
           method: 'POST',

@@ -16,7 +16,7 @@ const MakeAdmin = () => {
     isLoading,
     refetch,
   } = useQuery(["user"], () =>
-    fetch(`https://localhost:5000/users`, {
+    fetch(`https://thawing-atoll-26359.herokuapp.com/users`, {
       headers: {
         authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
@@ -35,7 +35,7 @@ const MakeAdmin = () => {
   const handleAdmin = (answer) => {
     if (answer) {
       fetch(
-        `https://localhost:5000/usersById?id=${makeAdminId}`,
+        `https://thawing-atoll-26359.herokuapp.com/usersById?id=${makeAdminId}`,
         {
           method: "put",
           headers: {

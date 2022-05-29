@@ -18,7 +18,7 @@ const MyProfile = () => {
     refetch,
   } = useQuery(["updateUserInfo", authUser?.email], () =>
     fetch(
-      `https://localhost:5000/usersByEmail?email=${authUser?.email}`
+      `https://thawing-atoll-26359.herokuapp.com/usersByEmail?email=${authUser?.email}`
     ).then((res) => res.json())
   );
 
@@ -36,7 +36,7 @@ const MyProfile = () => {
     const mobile = event.target.mobile.value;
 
     await fetch(
-      `https://localhost:5000/usersByEmail?email=${user.email}`,
+      `https://thawing-atoll-26359.herokuapp.com/usersByEmail?email=${user.email}`,
       {
         method: "put",
         headers: {

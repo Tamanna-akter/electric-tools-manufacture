@@ -1,27 +1,24 @@
-import { useState } from "react";
-// import { useQuery } from "react-query";
+import { useEffect, useState } from "react"
 
-const useAdmin = (authUser) => {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
+const useAdmin = (user) => {
+    const [admin, setAdmin] = useState(true);
+    const [adminLoading, setAdminLoading] = useState(true);
+    useEffect(() => {
+        const email = user?.email;
+        fetch(`https://thawing-atoll-26359.herokuapp.com/admin/${email}`, {
+            method: 'GET',
+            headers: {
+                'authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                setAdmin(data.admin);
+                setAdminLoading(false);
+            });
+    }, [user]);
 
-  useState(() => {
-    const email = authUser?.email;
-    if (email) {
-      fetch(
-        `https://thawing-atoll-26359.herokuapp.com/usersByEmail?email=${email}`
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.role === "admin") {
-            setIsAdmin(true);
-          }
-          setLoading(false);
-        });
-    }
-  }, [authUser]);
-
-  return [isAdmin, loading];
-};
+    return [admin, adminLoading]
+}
 
 export default useAdmin;

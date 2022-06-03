@@ -3,94 +3,56 @@ import Navbar from "./Pages/Shared/Navbar";
 import Footer from "./Pages/Shared/Footer";
 import { Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home/Home";
-import Tools from './Pages/Home/Tools';
+import Dashboard from './Pages/Dashboard/Dashboard';
+import RequireAdmin from './Pages/Authentication/RequireAdmin';
+import AdminRestriction from './Pages/Authentication/AdminRestriction';
 import Blogs from './Pages/Blogs/Blogs';
 import Portfolio from './Pages/Portfolio/Portfolio';
 import Login from './Pages/Authentication/Login';
-import Register from './Pages/Authentication/Register';
+import NotFound from './Pages/NotFound/NotFound';
 import RequireAuth from "./Pages/Authentication/RequireAuth";
 import { ToastContainer } from 'react-toastify';
-import Purchase from './Pages/Purchase/Purchase';
-import Dashboard from './Pages/Dashboard/Dashboard';
-import AddReview from './Pages/Dashboard/AddReview';
-import AdminRestriction from './Pages/Authentication/AdminRestriction';
-import NotFound from './Pages/NotFound/NotFound';
-import RequireAdmin from './Pages/Authentication/RequireAdmin';
-import MyOrder from './Pages/Dashboard/MyOrder';
+import Purchase from './Pages/Home/Purchase';
+import AddProduct from './Pages/Dashboard/AddProduct';
+import Register from './Pages/Authentication/Register';
+import AllUser from './Pages/Dashboard/AllUser';
+import UpdateProfile from './Pages/Dashboard/UpdateProfile';
+import MyOrders from './Pages/Dashboard/MyOrders';
+import ManageAllOrders from './Pages/Dashboard/ManageAllOrders';
+import ManageProducts from './Pages/Dashboard/ManageProducts';
 import MyProfile from './Pages/Dashboard/MyProfile';
-import MakeAdmin from './Pages/Dashboard/MakeAdmin';
-import ManageProduct from './Pages/Dashboard/ManageProduct';
-import ManageAllorder from './Pages/Dashboard/ManageAllorder';
+import AddReview from './Pages/Dashboard/AddReview';
+
+
 
 function App() {
   return (
-    <div>
-    <Navbar></Navbar>
-    <Routes>
-        <Route path="/" element={<Home></Home>}></Route>
-        <Route path="/home" element={<Home></Home>}></Route>
-        <Route path="/tools" element={<Tools></Tools>}></Route>
-        <Route path="/blogs" element={<Blogs></Blogs>}></Route>
-        <Route path="/portfolio" element={<Portfolio></Portfolio>}></Route>
-        <Route path="/login" element={<Login></Login>}></Route>
-        <Route path="/register" element={<Register></Register>}></Route>
-        <Route path="*" element={<NotFound></NotFound>}></Route>
-
-        <Route path="/purchase/:toolsId" element={
-          <RequireAuth>
-            <Purchase></Purchase>
-          </RequireAuth>}>
+    <div className="App max-w-screen-xl mx-auto">
+      <Navbar></Navbar>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/portfolio" element={<Portfolio></Portfolio>} />
+        <Route path="/blogs" element={<Blogs></Blogs>} />
+        <Route path="/purchase/:purchaseId" element={<RequireAuth><Purchase /></RequireAuth>} />
+        <Route path="/dashboard" element={<RequireAuth><Dashboard/></RequireAuth>} >
+          <Route index element={<MyProfile />}></Route>
+          <Route path='updateProfile' element={<UpdateProfile />}></Route>
+          <Route path='myorders' element={<AdminRestriction><MyOrders /></AdminRestriction>}></Route>
+          <Route path='addreview' element={<AdminRestriction><AddReview/></AdminRestriction>}></Route>
+          <Route path='allorders' element={<RequireAdmin><ManageAllOrders /></RequireAdmin>}></Route>
+          <Route path='allproducts' element={<RequireAdmin><ManageProducts /></RequireAdmin>}></Route>
+          <Route path='addproduct' element={<RequireAdmin><AddProduct /></RequireAdmin>}></Route>
+          <Route path='alluser' element={<RequireAdmin><AllUser /></RequireAdmin>}></Route>
         </Route>
-
-        <Route path="/dashboard"  element={<RequireAuth><Dashboard></Dashboard>
-        </RequireAuth>}>
-        </Route>
-
-        <Route index element={<MyProfile></MyProfile>}></Route>
-        <Route
-              path="add-review"
-              element={
-                <AdminRestriction>
-                  <AddReview />
-                </AdminRestriction>
-              }
-            />
-
-           <Route
-              path="my-order"
-              element={
-                <AdminRestriction>
-                  <MyOrder />
-                </AdminRestriction>
-              }
-            />
-
-           <Route
-              path="manage-all-order"
-              element={
-                <RequireAdmin>
-                  <ManageAllorder/>
-                </RequireAdmin>
-              }/>
-              <Route
-              path="make-admin"
-              element={
-                <RequireAdmin>
-                  <MakeAdmin/>
-                </RequireAdmin>
-              }/>
-              <Route
-               path="manage-product"
-               element={
-                 <RequireAdmin>
-                   <ManageProduct/>
-                 </RequireAdmin>
-               }/>
-    </Routes>
-    <Footer></Footer>
-    <ToastContainer></ToastContainer>
+        <Route path="/register" element={<Register/>} />
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<NotFound/>} />
+      </Routes>
+      <Footer></Footer>
+      <ToastContainer />
     </div>
   );
 }
+
 
 export default App;

@@ -1,127 +1,19 @@
-import { signOut } from "firebase/auth";
-import React, { useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import Modal from "../Shared/Modal";
-import Loading from "../Shared/Loading";
-import auth from "../../firebase.init";
+import React from 'react';
 
-const ManageAllorder = () => {
-  const [authUser] = useAuthState(auth);
-  const navigate = useNavigate();
-  const [modal, setModal] = useState(false);
-  const [deleteId, setDeleteId] = useState("");
-  const {
-    data: purchasedItems,
-    isLoading,
-    refetch,
-  } = useQuery(["manageallorder", authUser], () =>
-    fetch(`https://thawing-atoll-26359.herokuapp.com/purchase`, {
-      headers: {
-        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    }).then((res) => {
-      if (res.status === 200) {
-        return res.json();
-      } else {
-        localStorage.removeItem("accessToken");
-        signOut(auth);
-        navigate("/login");
-        toast.error(`${res.statusText} Access!!! Please Login again`);
-      }
-    })
-  );
-  const handleDelete = (answer) => {
-    if (answer) {
-      fetch(`https://loacalhost:5000/purchaseById/${deleteId}`, {
-        method: "delete",
-        headers: {
-          "content-type": "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.acknowledged) {
-            refetch();
-          }
-        });
-    }
-  };
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  return (
-    <div className=" flex justify-center">
-      <div className=" w-full lg:pl-5">
-        <h2 className=" text-center text-primary text-4xl mb-5 uppercase">
-          Manage all order
-        </h2>
-        <div className="overflow-x-auto w-full">
-          <table className="table w-full">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Quantity</th>
-                <th>Total Price</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {purchasedItems &&
-                purchasedItems.map((item, key) => (
-                  <tr key={key}>
-                    <th>{key + 1}</th>
-                    <td className=" capitalize">{item.partsName}</td>
-                    <td>{item.quantity} pcs</td>
-                    <td>{item.price} tk</td>
-                    <td>
-                      {item.paymentId ? (
-                        <>
-                          <p className=" text-success">Paid</p>{" "}
-                          <small className=" block">{item.paymentId}</small>
-                          <label
-                            htmlFor="confirmation-modal"
-                            onClick={() => {
-                              setModal(true);
-                              setDeleteId(item._id);
-                            }}
-                            className="btn btn-error btn-xs text-white"
-                          >
-                            Delete
-                          </label>
-                        </>
-                      ) : (
-                        <>
-                          
-                          <label
-                            htmlFor="confirmation-modal"
-                            onClick={() => {
-                              setModal(true);
-                              setDeleteId(item._id);
-                            }}
-                            className="btn btn-error btn-xs text-white"
-                          >
-                            Delete
-                          </label>
-                        </>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
-        {modal && (
-          <Modal setModal={setModal} handleDelete={handleDelete} />
-        )}
-      </div>
-    </div>
-  );
+const ManageAllOrder = ({ index, order }) => {
+    const { name, email, address, phone, productName, orderQuantity } = order;
+    return (
+        <tr>
+            <th>{index + 1}</th>
+            <td>{name}</td>
+            <td>{email}</td>
+            <td>{address}</td>
+            <td>{phone}</td>
+            <td>{productName}</td>
+            <td>{orderQuantity}</td>
+            <td><button className="btn btn-xs capitalize">delete</button></td>
+        </tr>
+    );
 };
 
-export default ManageAllorder;
+export default ManageAllOrder;

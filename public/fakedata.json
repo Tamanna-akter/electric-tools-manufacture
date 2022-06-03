@@ -3,52 +3,52 @@
       "name": "LIGHT ROTARY HAMMERS",
       "img": "https://i.ibb.co/nf0dYHJ/tool1.jpg",
      "description":"Rotary hammers provide a lot more impact energy than hammer drills. 1 year for machinary warranty. On time dispatch gurantee and customized packaging.",
-     "min-quantity": 50,
-     "available-quantity": 100,
-     "unit-price": 70
+     "minimumOrder": 50,
+     "availableQuantity": 100,
+     "price": 70
     },
     {
      
       "name": "125MM ANGLE GRINDER",
       "img": "https://i.ibb.co/F4qMQFB/tool2.jpg",
       "description":"In short, cordless angle grinders are incredibly beneficial due to the added degree of convenience they offer. 1 year for machinary warranty. On time dispatch gurantee and customized packaging.",
-      "min-quantity": 60,
-      "available-quantity": 200,
-      "unit-price": 80
+      "minimumOrder": 60,
+      "availableQuantity": 200,
+      "price": 80
     },
     {
       
       "name": "ELECTRIC DRILLS",
       "img": "https://i.ibb.co/S548BpT/tool3.jpg",
       "description":"Drills are primarily used for drilling circular holes in material, or for inserting screws and other threaded fasteners into material. 1 year for machinary warranty. On time dispatch gurantee and customized packaging.",
-      "min-quantity": 70,
-      "available-quantity": 200,
-      "unit-price": 90
+      "minimumOrder": 70,
+      "availableQuantity": 200,
+      "price": 90
     },
     {
       
       "name": "ELECTRIC CHAINSAWS",
       "img": "https://i.ibb.co/JRR60bx/tool4.jpg",
       "description":"Electric chainsaws are great for all your residential cutting, pruning, trimming, shaping, or simply for clearing branches. 1 year for machinary warranty. On time dispatch gurantee and customized packaging.",
-      "min-quantity": 75,
-      "available-quantity": 150,
-      "unit-price": 40
+      "minimumOrder": 75,
+      "availableQuantity": 150,
+      "price": 40
     },
     {
      
       "name": "HEAT GUNS",
       "img": "https://i.ibb.co/5h2Tz0j/tool5.jpg",
       "description":"Heat guns, often called hot air guns or hot air stations for this application, are used in electronics to desolder and rework surface-mounted circuit board components. 1 year for machinary warranty. On time dispatch gurantee and customized packaging.",
-      "min-quantity": 50,
-      "available-quantity": 300,
-      "unit-price": 90
+      "minimumOrder": 50,
+      "availableQuantity": 300,
+      "price": 90
     },
     {
       "name": "ELECTRIC ROUTERS",
       "img": "https://i.ibb.co/y8NJD6J/tools6.jpg",
       "description":"A router is an electric power tool used to cut a variety of different shapes in materials such as wood, plastic, MDF and some metals. 1 year for machinary warranty. On time dispatch gurantee and customized packaging.",
-      "min-quantity": 80,
-      "available-quantity": 250,
-      "unit-price": 60
+      "minimumOrder": 80,
+      "availableQuantity": 250,
+      "price": 60
     }
   ]

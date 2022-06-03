@@ -1,81 +1,114 @@
-import React, { useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { toast } from "react-toastify";
-import auth from "../../firebase.init";
-
+import React from 'react';
+import { useForm } from "react-hook-form";
+import { toast } from 'react-toastify';
 const AddReview = () => {
-  const [user] = useAuthState(auth);
-  const [loading, setLoading] = useState(false);
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const imageStorageKey = '9382f78e6ee6382ce39fb0493002c2fa';
+    const handleAddProduct = data => {
+        const image = data.image[0];
+        const formData = new FormData();
+        formData.append('image', image);
+        const url = `https://api.imgbb.com/1/upload?key=${imageStorageKey}`;
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+            .then(res => res.json())
+            .then(result => {
+                const img = result.data.url;
+                if (result.success) {
+                    const review = {
+                        name: data.name,
+                        comment: data.comment,
+                        ratings: data.ratings,
+                        img: img
+                    };
+                    fetch('https://thawing-atoll-26359.herokuapp.com/review', {
+                        method: 'POST',
+                        body: JSON.stringify(review),
+                        headers: {
+                            'Content-type': 'application/json',
+                            'authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                        },
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.acknowledged) {
+                                toast.success('Your review added successfully');
+                            } else {
+                                toast.error('Your review added faild');
+                            }
+                        });
+                }
+            });
+    }
+    return (
+        <div>
+            <div className='w-96 mx-auto'>
+                <div className="card w-96 bg-base-100 shadow-xl">
+                    <h1 className='text-center text-primary text-2xl font-bold'>Add Your Review</h1>
+                    <form onSubmit={handleSubmit(handleAddProduct)} className="card-body items-center text-center ">
+                        <div>
+                            <input type="text" placeholder='Enter your name' className="input input-bordered w-96 max-w-xs"
+                                {...register("name", {
+                                    required: {
+                                        value: true,
+                                        message: 'Name is Required *'
+                                    }
+                                })} />
+                            <label className="label">
+                                {errors.name?.type === 'required' && <span className="label-text-alt text-red-500">{errors.name.message}</span>}
+                            </label>
+                        </div>
+                        <div>
+                            <textarea placeholder='Enter your comment' className="input input-bordered w-96 max-w-xs"
+                                {...register("comment", {
+                                    required: {
+                                        value: true,
+                                        message: 'Your comment is Required *'
+                                    }
+                                })} />
+                            <label className="label">
+                                {errors.comment?.type === 'required' && <span className="label-text-alt text-red-500">{errors.comment.message}</span>}
+                            </label>
+                        </div>
+                        <div>
+                            <input type="text" placeholder='Enter ratings' className="input input-bordered w-96 max-w-xs"
+                                {...register("ratings", {
+                                    required: {
+                                        value: true,
+                                        message: 'ratings is Required *'
+                                    }
+                                })} />
+                            <label className="label">
+                                {errors.ratings?.type === 'required' && <span className="label-text-alt text-red-500">{errors.ratings.message}</span>}
+                            </label>
+                        </div>
 
-  const handleForm = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    const name = user.displayName;
-    const rating = event.target.rating.value;
-    const message = event.target.message.value;
+                        <div>
+                            <label className="label">
+                                <span className="label-text">Upload your image</span>
+                            </label>
+                            <input type="file" className="input input-bordered w-96 max-w-xs"
+                                {...register("image", {
+                                    required: {
+                                        value: true,
+                                        message: 'Upload your image *'
+                                    },
 
-    const review = {
-      name,
-      rating,
-      message,
-    };
+                                })} />
+                            <label className="label">
+                                {errors.image?.type === 'required' && <span className="label-text-alt text-red-500">{errors.image.message}</span>}
 
-    await fetch(`http://localhost:5000/review`, {
-      method: "post",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(review),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.insertedId) {
-          event.target.reset();
-          toast.success("Thank you for your Review.");
-        }
-      });
-    setLoading(false);
-  };
+                            </label>
+                        </div>
+                        <input type="submit" value='Add Comment' className=" btn btn-primary  w-full max-w-xs" />
+                    </form>
 
-  return (
-    <div className="flex justify-center">
-      <div className="w-full max-w-lg">
-        <h2 className=" text-center text-primary text-4xl mb-5 uppercase">
-          add a review
-        </h2>
-        <form onSubmit={handleForm}>
-          <div className="form-control w-full max-w-lg mt-1">
-            <label className="label">
-              <span className="label-text">Rating:</span>
-            </label>
-            <input
-              required
-              type="number"
-              name="rating"
-              placeholder="between 0 to 5"
-              className="input input-bordered input-primary w-full max-w-lg"
-            />
-          </div>
-          <div className="form-control w-full max-w-lg mt-1">
-            <label className="label">
-              <span className="label-text">Short Message:</span>
-            </label>
-            <input
-              required
-              type="text"
-              name="message"
-              className="input input-bordered input-primary w-full max-w-lg"
-            />
-          </div>
-          <button
-            className={` btn btn-primary mt-10 w-full ${loading && "loading"}`}
-          >
-            {loading ? "" : "add"}
-          </button>
-        </form>
-      </div>
-    </div>
-  );
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default AddReview;
